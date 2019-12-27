@@ -1,0 +1,68 @@
+---
+
+- name: Cisco_inventory_File
+  hosts: cisco-switch
+  ignore_unreachable: true
+  serial: 1
+  gather_facts: false
+  connection: local
+
+  tasks:
+     - name: Gather hardware facts
+       ios_facts:
+         gather_subset:
+           - hardware
+           - interfaces
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_model fact
+       debug: var=ansible_net_model
+       register: ansible_net_model
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_hostname fact
+       debug: var=ansible_net_hostname
+       register: ansible_net_hostname
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_image fact
+       debug: var=ansible_net_image
+       register: ansible_net_image
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_memfree_mb fact
+       debug: var=ansible_net_memfree_mb
+       register: ansible_net_memfree_mb
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_serialnum fact
+       debug: var=ansible_net_serialnum
+       register: ansible_net_serialnum
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: ansible_net_all_ipv4_addresses fact
+       debug: var=ansible_net_all_ipv4_addresses
+       register: ansible_net_all_ipv4_addresses
+       ignore_unreachable: true
+       ignore_errors: yes
+
+     - name: Add mappings to /Cisco_inventory_File
+       blockinfile:
+          path: /Cisco_inventory_File
+          block: |
+            {{ansible_net_model | json_query('ansible_net_model')}}
+            {{ ansible_net_hostname | json_query('ansible_net_hostname')}}
+            {{ ansible_net_image | json_query('ansible_net_image')}}
+            {{ ansible_net_memfree_mb | json_query('ansible_net_memfree_mb')}}
+            {{ ansible_net_serialnum | json_query('ansible_net_serialnum')}}
+            {{ ansible_net_all_ipv4_addresses | json_query('ansible_net_all_ipv4_addresses')}}"
+          marker: "# {mark} ANSIBLE MANAGED BLOCK {{ ansible_net_hostname }}"
+       delegate_to: localhost
+       ignore_unreachable: true
+       ignore_errors: yes
