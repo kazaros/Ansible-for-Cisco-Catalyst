@@ -1,0 +1,42 @@
+---
+
+- name: Run show commands on routers
+  hosts: 10.78.8.4
+  gather_facts: false
+  connection: local
+
+
+  tasks:
+
+    - name: run mac address-table | include XXXX.XXXX.XXXX
+      ios_command:
+        commands:
+          - sh mac address-table | include XXXX.XXXX.XXXX
+        wait_for:
+          - result[0] contains XXXX.XXXX.XXXX
+      ignore_errors: yes
+      register: show_result
+
+    - name: Debug registered var
+      debug: var=show_result.stdout_lines
+
+    - name: Send e-mail to a bunch of users, attaching files
+      mail:
+        host: 10.77.2.40
+        port: 25
+        subject: i901 Find MAC address
+        body: Find MAC address. Open switch and paste command with MAC address
+            <br /> {{ 1, show_result.stdout_lines }}
+            <br />
+            <br />
+        from: CCCCCC@CCCCCC.ru
+        to:
+        - mikhail.belyaev <CCCCCC@CCCCCC.ru>
+        cc: juriy.kazarjan <CCCCCC@CCCCCC.ru>
+        headers:
+        - X-Special="Something or other"
+        charset: us-ascii
+        subtype: html
+#       attach: /var/www/reports/latest.csv
+      ignore_errors: yes
+      delegate_to: localhost
