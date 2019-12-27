@@ -1,0 +1,31 @@
+---
+
+- name: Run show commands on routers
+  hosts: 10.78.8.138,10.78.8.139
+  serial: 1
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: COPY_FTP_IMAGE
+      cli_command:
+        command: "copy ftp flash:"
+        check_all: True
+        prompt:
+          - 'Address or name of remote host'
+          - 'Source filename'
+          - 'Destination filename'
+        answer:
+          - '10.77.33.19'
+          - 'c2960s-universalk9-mz.152-2.E9.bin'
+          - 'c2960s-universalk9-mz.152-2.E9.bin'
+
+    - name: EDIT_BOOT_IMAGE
+      ios_config:
+        lines:
+          - no boot system
+          - boot system flash:/c2960s-universalk9-mz.152-2.E9.bin"
+
+    - name: SAVE_CONFIG
+      cli_command:
+        command: "write memory"
