@@ -1,0 +1,27 @@
+---
+
+- name: reboot Gi 1/0/47
+  hosts: 10.X.X.X
+
+
+  serial: 1
+  gather_facts: yes
+  connection: network_cli
+
+
+
+  tasks:
+    - name: shutdown Gi 1/0/47
+      ios_config:
+        lines:
+          - interface gigabitEthernet 1/0/47
+          - shutdown
+
+    - pause: seconds=3
+    
+    - name: NO shutdown Gi 1/0/47
+      ios_config:
+        lines:
+          - interface gigabitEthernet 1/0/47
+          - no shutdown
+
