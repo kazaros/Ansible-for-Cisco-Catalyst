@@ -32,8 +32,8 @@
             <br />
         from: CCCCCC@CCCCCC.ru
         to:
-        - mikhail.belyaev <CCCCCC@CCCCCC.ru>
-        cc: juriy.kazarjan <CCCCCC@CCCCCC.ru>
+        - ivan.ivanov <CCCCCC@CCCCCC.ru>
+        cc: petr.petrov <CCCCCC@CCCCCC.ru>
         headers:
         - X-Special="Something or other"
         charset: us-ascii
